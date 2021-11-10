@@ -24,9 +24,9 @@ function reduceData() {
     const reducedData = data.map((d) => {
       return {
         country: d.Country,
-        population: d.Population !== null ? d.Population : -1,
-        area: d["Area(sq km)"] !== null ? d["Area(sq km)"] : -1,
-        users: d["Internet users"] !== null ? d["Internet users"] : -1,
+        population: d.Population,
+        area: d["Area(sq km)"],
+        users: d["Internet users"],
       }
     })
     return reducedData.slice(0, 51)
@@ -36,8 +36,20 @@ function reduceData() {
 // SORT DATA ASCENDING
 function sortAscending(items, prop) {
   if (items[0][prop] === "double") {
-    return items.sort((a, b) => a[prop] - b[prop])
-  } else if (items[0][prop] === "String") {
+    return items.sort((a, b) => {
+      if (a[prop] === null && b[prop] === null) {
+        return 0
+      }
+      if (a[prop] === null) {
+        return 0 - b[prop]
+      }
+      if (b[prop] === null) {
+        return a[prop]
+      }
+      return a[prop] - b[prop]
+    })
+  }
+  if (items[0][prop] === "String") {
     return items.sort((a, b) => {
       const nameA = a[prop].toUpperCase() // ignore upper and lowercase
       const nameB = b[prop].toUpperCase() // ignore upper and lowercase
@@ -54,7 +66,18 @@ function sortAscending(items, prop) {
 // SORT DATA DESCENDING
 function sortDescending(items, prop) {
   if (items[0][prop] === "double") {
-    return items.sort((a, b) => b[prop] - a[prop])
+    return items.sort((a, b) => {
+      if (a[prop] === null && b[prop] === null) {
+        return 0
+      }
+      if (a[prop] === null) {
+        return b[prop]
+      }
+      if (b[prop] === null) {
+        return 0 - a[prop]
+      }
+      return b[prop] - a[prop]
+    })
   }
   if (items[0][prop] === "String") {
     return items.sort((a, b) => {
@@ -109,7 +132,7 @@ function renderTableBody(items) {
     row.appendChild(rowHeading)
     for (const prop in item) {
       let cell = document.createElement("td")
-      cell.innerHTML = item[prop] !== -1 ? item[prop] : "Unknown"
+      cell.innerHTML = item[prop] !== null ? item[prop] : "Unknown"
       row.appendChild(cell)
     }
     tableBody.appendChild(row)
