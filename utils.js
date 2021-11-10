@@ -23,10 +23,10 @@ function reduceData() {
   return fetchData().then((data) => {
     const reducedData = data.map((d) => {
       return {
-        country: d.Country,
-        population: d.Population,
-        area: d["Area(sq km)"],
-        users: d["Internet users"],
+        Country: d.Country,
+        Population: d.Population,
+        "Area (sq km)": d["Area(sq km)"],
+        "Internet users": d["Internet users"],
       }
     })
     return reducedData.slice(0, 51)
