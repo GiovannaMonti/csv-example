@@ -1,10 +1,13 @@
 import { reduceData, sortData } from "./data.js"
 import { setButtonContent, createButton, createHeader } from "./elements.js"
 // PRINT DATA TO DOM
+function getColumnNames(items) {
+  return Object.keys(items[0])
+}
 
 function renderTableTitles(items) {
   const tableTitles = document.getElementById("table-titles")
-  const columnNames = Object.keys(items[0])
+  const columnNames = getColumnNames(items)
   columnNames.unshift("#")
   columnNames.forEach((name) => {
     const columnHeader = createHeader(name + "-column", "col", name + " ")
@@ -17,7 +20,7 @@ function renderTableTitles(items) {
   })
 }
 function resetTableTitles(items, id) {
-  const columnNames = Object.keys(items[0])
+  const columnNames = getColumnNames(items)
   columnNames.forEach((name) => {
     const button = document.getElementById(name)
     if (button.getAttribute("id") !== id) {
@@ -59,4 +62,4 @@ function viewData(prop, order) {
   })
 }
 
-export { viewTableTitles, viewData, viewResettedTableTitles }
+export { viewTableTitles, viewData, viewResettedTableTitles, getColumnNames }
