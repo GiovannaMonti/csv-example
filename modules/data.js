@@ -12,28 +12,27 @@ async function fetchCSV(url) {
 // FETCH DATA
 const fetchData = async () => {
   try {
-    let parsedData = await fetchCSV("/factbook.csv")
+    const parsedData = await fetchCSV("/factbook.csv")
     return parsedData
   } catch (e) {
     console.log(e)
   }
 }
 // REDUCE DATA
-function reduceData() {
-  return fetchData().then((data) => {
-    const reducedData = data.map((d) => {
-      return {
-        Country: d.Country,
-        Population: d.Population,
-        "Area (sq km)": d["Area(sq km)"],
-        "Internet users": d["Internet users"],
-      }
-    })
-    return reducedData.slice(0, 51)
+async function reduceData() {
+  const data = await fetchData()
+  const reducedData = data.map((d) => {
+    return {
+      Country: d.Country,
+      Population: d.Population,
+      "Area (sq km)": d["Area(sq km)"],
+      "Internet users": d["Internet users"],
+    }
   })
+  return reducedData.slice(0, 51)
 }
 
-//COMPARE AND SORT FUNCTION
+//SORT FUNCTION BASED ON ORDER
 function sortData(items, prop, order) {
   const itemType = items[0][prop]
   items.shift()
@@ -42,9 +41,9 @@ function sortData(items, prop, order) {
   }
   if (itemType === "double") {
     return items.sort((a, b) => {
-      if (a[prop] === null && b[prop] === null) {
+      /* if (a[prop] === null && b[prop] === null) {
         return 0
-      }
+      } */
       if (a[prop] === null) {
         if (order === "ascending") {
           return -b[prop]
