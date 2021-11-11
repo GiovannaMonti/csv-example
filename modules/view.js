@@ -1,4 +1,5 @@
 import { reduceData, sortData } from "./data.js"
+import { setButtonContent, createButton, createHeader } from "./elements.js"
 // PRINT DATA TO DOM
 
 function renderTableTitles(items) {
@@ -6,23 +7,21 @@ function renderTableTitles(items) {
   const columnNames = Object.keys(items[0])
   columnNames.unshift("#")
   columnNames.forEach((name) => {
-    let columnName = document.createElement("th")
-    columnName.id = name + "-column"
-    columnName.scope = "col"
-    name !== "#"
-      ? (columnName.innerHTML = `${name} <button class="btn" id="${name}" data-order="original">Original <i class="fas fa-arrows-alt-v"></i></button>`)
-      : (columnName.innerHTML = name)
-    tableTitles.appendChild(columnName)
+    const columnHeader = createHeader(name + "-column", "col", name + " ")
+    if (name !== "#") {
+      const btn = createButton("btn", name)
+      setButtonContent(btn, "original", "Original ", "fas fa-arrows-alt-v")
+      columnHeader.appendChild(btn)
+    }
+    tableTitles.appendChild(columnHeader)
   })
 }
 function resetTableTitles(items, id) {
   const columnNames = Object.keys(items[0])
   columnNames.forEach((name) => {
     const button = document.getElementById(name)
-    console.log(button)
     if (button.getAttribute("id") !== id) {
-      button.setAttribute("data-order", "original")
-      button.innerHTML = `Original <i class="fas fa-arrows-alt-v"></i>`
+      setButtonContent(button, "original", "Original ", "fas fa-arrows-alt-v")
     }
   })
 }
@@ -30,13 +29,11 @@ function resetTableTitles(items, id) {
 function renderTableBody(items) {
   const tableBody = document.getElementById("table-body")
   items.forEach((item, index) => {
-    let row = document.createElement("tr")
-    let rowHeading = document.createElement("th")
-    rowHeading.scope = "row"
-    rowHeading.innerHTML = index + 1
-    row.appendChild(rowHeading)
+    const row = document.createElement("tr")
+    const rowHeader = createHeader("row-" + index, "row", index + 1)
+    row.appendChild(rowHeader)
     for (const prop in item) {
-      let cell = document.createElement("td")
+      const cell = document.createElement("td")
       cell.innerHTML = item[prop] !== null ? item[prop] : "Unknown"
       row.appendChild(cell)
     }
