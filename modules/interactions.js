@@ -1,9 +1,8 @@
 import { setButtonContent, deleteContent } from "./elements.js"
-import { viewResettedTableTitles, viewData } from "./view.js"
+import { viewResettedTableTitles, viewData, getColumnNames } from "./view.js"
 
 function addButtonClickListener(items) {
-  const item = items[0]
-  const columnNames = Object.keys(item)
+  const columnNames = getColumnNames(items)
   columnNames.forEach((name) => {
     const button = document.getElementById(name)
     button.addEventListener("click", (event) => onButtonClick(button, event))
